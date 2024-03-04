@@ -3,31 +3,18 @@
 import pandas as pd
 import folium
 
+
 def load_affiliations():
-    """Carga el archivo scopus-papers.csv y retorna un dataframe con la columna 'Affiliations'"""
-    dataframe = pd.read_csv(
-        "https://raw.githubusercontent.com/jdvelasq/datalabs/master/datasets/scopus-papers.csv",
-        sep=",",
-        index_col=None,
-    )[["Affiliations"]]
+    """Load affiliations from scopus-papers.csvi"""
+    dataframe = pd.read_csv("https://raw.githubusercontent.com/jdvelasq/datalabs/master/datasets/scopus-papers.csv", sep=",", index_col=None)[['Affiliations']]
     return dataframe
 
-df = load_affiliations()
-print(df.sort_values("Affiliations").head())
-print(df.sort_values("Affiliations").tail())
-  
 def remove_na_rows(affiliations):
     """Elimina las filas con valores nulos en la columna 'Affiliations'"""
-
     affiliations = affiliations.copy()
     affiliations = affiliations.dropna(subset=["Affiliations"])
-
     return affiliations
 
-
-# print(df.sort_values("Affiliations").head())
-# print(df.sort_values("Affiliations").tail())
-    
 def add_countries_column(affiliations):
     """Transforma la columna 'Affiliations' a una lista de paises."""
 
@@ -44,8 +31,7 @@ def add_countries_column(affiliations):
     affiliations["countries"] = affiliations["countries"].str.join(", ")
 
     return affiliations
-
-
+  
 def clean_countries(affiliations):
 
     affiliations = affiliations.copy()
@@ -63,7 +49,6 @@ def count_country_frequency(affiliations):
     countries = countries.value_counts()
     return countries
 
-
 def plot_world_map(countries):
     """Grafica un mapa mundial con la frecuencia de cada país."""
 
@@ -80,9 +65,7 @@ def plot_world_map(countries):
         key_on="feature.properties.name",
         fill_color="Greens",
     ).add_to(m)
-
     m.save("map.html")
-    
   
 def main():
     """Función principal"""
@@ -94,7 +77,5 @@ def main():
     countries.to_csv("countries.csv")
     plot_world_map(countries)
 
-
 if __name__ == "__main__":
     main()
-    
